@@ -14,14 +14,6 @@ const reelsData = [
     { id: 'Ez9o_F5Re4Y', title: "Strategic Visuals", category: "Engagement" }
 ];
 
-let activePlayers = []; // Track YouTube players to control playback
-
-// Load YouTube API
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 // ===================================
 // HEADER SCROLL EFFECT
 // ===================================
@@ -87,69 +79,12 @@ function generateReelCards() {
         `;
 
         card.addEventListener('click', () => {
-            openReelModal(reel.id);
+            window.open(`https://www.youtube.com/shorts/${reel.id}`, '_blank');
         });
 
         reelsGrid.appendChild(card);
     });
 }
-
-// ===================================
-// REEL MODAL & YOUTUBE API
-// ===================================
-
-const reelModal = document.getElementById('reelModal');
-const modalClose = document.getElementById('modalClose');
-let player;
-
-function onYouTubeIframeAPIReady() {
-    // API is ready
-}
-
-function openReelModal(videoId) {
-    reelModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    const origin = window.location.origin === 'null' ? '*' : window.location.origin;
-    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&loop=1&playlist=${videoId}&enablejsapi=1&origin=${encodeURIComponent(origin)}`;
-
-    // Using a direct iframe replacement for better reliability on local files
-    const container = document.getElementById('player-container');
-    container.innerHTML = `<iframe 
-        width="100%" 
-        height="100%" 
-        src="${embedUrl}" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media; picture-in-picture" 
-        allowfullscreen></iframe>`;
-}
-
-function closeReelModal() {
-    reelModal.classList.remove('active');
-    const container = document.getElementById('player-container');
-    container.innerHTML = ''; // Completely remove iframe to stop playback
-    document.body.style.overflow = '';
-}
-
-modalClose.addEventListener('click', closeReelModal);
-reelModal.addEventListener('click', (e) => {
-    if (e.target === reelModal) closeReelModal();
-});
-
-modalClose.addEventListener('click', closeReelModal);
-
-reelModal.addEventListener('click', (e) => {
-    if (e.target === reelModal) {
-        closeReelModal();
-    }
-});
-
-// Close modal on ESC key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && reelModal.classList.contains('active')) {
-        closeReelModal();
-    }
-});
 
 // ===================================
 // CONTACT FORM HANDLING
